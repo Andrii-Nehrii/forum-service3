@@ -29,6 +29,12 @@ public class SecurityConfiguration {
                     .access(new WebExpressionAuthorizationManager("#login == authentication.name"))
                 .requestMatchers(HttpMethod.DELETE, "/account/user/{login}")
                     .access(new WebExpressionAuthorizationManager("#login == authentication.name or hasRole('ADMINISTRATOR')"))
+                .requestMatchers(HttpMethod.POST , "/forum/post/{user}")
+                    .access(new WebExpressionAuthorizationManager("isAuthenticated() and #user == authentication.name"))
+                .requestMatchers(HttpMethod.PATCH , "/forum/post/{id}/comment/{author}")
+                    .access(new WebExpressionAuthorizationManager("isAuthenticated() and #author == authentication.name"))
+
+
                 .anyRequest()
                     .authenticated());
         return http.build();
